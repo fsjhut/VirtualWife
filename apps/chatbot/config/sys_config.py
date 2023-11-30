@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 import os
@@ -167,18 +166,18 @@ class SysConfig():
         logger.info("=> Load SysConfig Success")
 
         # 加载直播配置
-        if self.bili_live_client != None:
-            self.bili_live_client.stop()
-        room_id = str(sys_config_json["liveStreamingConfig"]["B_STATION_ID"])
-        print("=> liveStreaming Config")
-        self.room_id = room_id
-        from apps.chatbot.insight.bilibili.bili_live_client import BiliLiveClient
-        self.bili_live_client = BiliLiveClient(room_id=room_id)
-        # 创建后台线程
-        import threading
-        background_thread = threading.Thread(
-            target=asyncio.run(self.bili_live_client.start()))
-        # 将后台线程设置为守护线程，以便在主线程结束时自动退出
-        background_thread.daemon = True
-        # 启动后台线程
-        background_thread.start()
+        # if self.bili_live_client != None:
+        #     self.bili_live_client.stop()
+        # room_id = str(sys_config_json["liveStreamingConfig"]["B_STATION_ID"])
+        # print("=> liveStreaming Config")
+        # self.room_id = room_id
+        # from apps.chatbot.insight.bilibili.bili_live_client import BiliLiveClient
+        # self.bili_live_client = BiliLiveClient(room_id=room_id)
+        # # 创建后台线程
+        # import threading
+        # background_thread = threading.Thread(
+        #     target=asyncio.run(self.bili_live_client.start()))
+        # # 将后台线程设置为守护线程，以便在主线程结束时自动退出
+        # background_thread.daemon = True
+        # # 启动后台线程
+        # background_thread.start()
