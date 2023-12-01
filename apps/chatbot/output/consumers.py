@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 class ChatConsumer(WebsocketConsumer):
 
     def connect(self):
+        # 接受 WebSocket 连接
         self.accept()
         # 将连接的客户端添加到特定频道
         async_to_sync(self.channel_layer.group_add)(
@@ -18,6 +19,7 @@ class ChatConsumer(WebsocketConsumer):
         )
         logger.info(f'=> ws connect group : {chat_channel}')
 
+    # 从特定频道中移除连接的客户端。
     def disconnect(self, close_code):
         # 在客户端断开连接时从频道中移除
         async_to_sync(self.channel_layer.group_discard)(
@@ -25,6 +27,8 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+    # 方法在接收到客户端发送的消息时调用。
+    # 目前被注释掉，因此不做任何处理。
     def receive(self, text_data):
         logger.info(f"=> run receive:{text_data}")
         # self.send(text_data=json.dumps({"message": text_data}))
