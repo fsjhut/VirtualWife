@@ -55,7 +55,10 @@ def put_message(message: RealtimeMessage):
 
 def send_message():
     global chat_queue
+    # 获取当前 Django Channels 应用的 Channel Layer。Channel Layer 用于处理 WebSocket 连接上的消息。
     channel_layer = get_channel_layer()
+    #  通过 async_to_sync 函数将异步的 group_send 方法转换成同步调用。
+    # 用于将消息发送到特定的 channel group
     send_message_exe = async_to_sync(channel_layer.group_send)
 
     while True:
