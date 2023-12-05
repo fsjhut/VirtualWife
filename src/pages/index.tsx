@@ -131,7 +131,7 @@ export default function Home() {
         user_name: string,
         content: string,
         emote: string) => {
-
+        // debugger
         console.log("RobotMessage:" + content + " emote:" + emote)
         // 如果content为空，不进行处理
         // 如果与上一句content完全相同，不进行处理
@@ -293,7 +293,8 @@ export default function Home() {
         webGlobalConfig = globalConfig;
     }, [])
 
-    const handleWebSocketMessage = (event: MessageEvent) => {
+  const handleWebSocketMessage = (event: MessageEvent) => {
+        // debugger
         const data = event.data;
         const chatMessage = JSON.parse(data);
         const type = chatMessage.message.type;
@@ -354,7 +355,7 @@ export default function Home() {
                     <div className="absolute bottom-1/4 z-10" style={{
                         fontFamily: "fzfs",
                         fontSize: "24px",
-                        color: "#555",
+                        color: "#fff",
                     }}>
                         {displayedSubtitle}
                     </div>

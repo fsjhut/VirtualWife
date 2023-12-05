@@ -17,7 +17,11 @@ export const initialFormData = {
 		"textGeneration": {
 			"TEXT_GENERATION_API_URL": "http://127.0.0.1:5000",
 			"TEXT_GENERATION_WEB_SOCKET_URL": "ws://127.0.0.1:5005/api/v1/stream"
-		}
+    },
+    "ownAI": {
+			"OWN_API_URL": "http://127.0.0.1:5000",
+			"OWN_WEB_SOCKET_URL": "ws://127.0.0.1:5005/api/v1/stream"
+		},
 	},
 	"characterConfig": {
 		"character": 1,
@@ -62,7 +66,7 @@ export async function getConfig() {
         "Content-Type": "application/json"
     };
 
-    const chatRes = await getRequest("/chatbot/config/get", headers);
+  const chatRes = await getRequest("/chatbot/config/get", headers);
     if (chatRes.code !== '200') {
         throw new Error("Something went wrong");
     }

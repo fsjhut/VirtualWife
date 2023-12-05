@@ -20,7 +20,7 @@ import { join } from 'path';
 import { voiceData, getVoices } from '@/features/tts/ttsApi';
 
 const tabNames = ['基础设置', '自定义角色设置', '大语言模型设置', '记忆模块设置', '高级设置'];
-const llm_enums = ["openai", "text_generation"]
+const llm_enums = ["openai", "text_generation","own_ai"]
 
 const publicDir = join(process.cwd(), 'public');
 
@@ -441,6 +441,27 @@ export const Settings = ({
             <input type="text" defaultValue={formData.languageModelConfig.textGeneration.TEXT_GENERATION_WEB_SOCKET_URL ? formData.languageModelConfig.textGeneration.TEXT_GENERATION_WEB_SOCKET_URL : "ws://127.0.0.1:5005/api/v1/stream"}
               onChange={e => {
                 formData.languageModelConfig.textGeneration.TEXT_GENERATION_WEB_SOCKET_URL = e.target.value
+                setFormData(formData);
+              }}
+            />
+          </div>
+        </div>
+        <div className="section">
+          <div className="title">own-ai-webui配置</div>
+          <div className="field">
+            <label>OWN_API_URL</label>
+            <input type="text" defaultValue={formData.languageModelConfig.ownAI.OWN_API_URL}
+              onChange={e => {
+                formData.languageModelConfig.ownAI.OWN_API_URL = e.target.value
+                setFormData(formData);
+              }}
+            />
+          </div>
+          <div className="field">
+            <label>OWN_WEB_SOCKET_URL</label>
+            <input type="text" defaultValue={formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL ? formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL : "ws://127.0.0.1:5005/api/v1/stream"}
+              onChange={e => {
+                formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL = e.target.value
                 setFormData(formData);
               }}
             />
