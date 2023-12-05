@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import threading
 import asyncio
 from .openai.openai_chat_robot import OpenAIGeneration
+from .ownAI.ownAI_chat_rebot import OwnAIGeneration
 from .text_generation.text_generation_chat_robot import TextGeneration
 
 
@@ -88,6 +89,7 @@ class LlmModelDriver:
     def __init__(self):
         self.openai = OpenAIGeneration()
         self.textGeneration = TextGenerationLlmModelStrategy()
+        self.ownAI = OwnAIGeneration()
         self.chat_stream_lock = threading.Lock()
 
     def chat(self, prompt: str, type: str, role_name: str, you_name: str, query: str, short_history: list[dict[str, str]], long_history: str) -> str:
@@ -119,5 +121,7 @@ class LlmModelDriver:
             return self.openai
         elif type == "text_generation":
             return self.textGeneration
+        elif type == "own_ai":
+            return self.ownAI
         else:
             raise ValueError("Unknown type")
