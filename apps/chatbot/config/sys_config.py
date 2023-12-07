@@ -111,6 +111,7 @@ class SysConfig():
         os.environ['TEXT_GENERATION_API_URL'] = sys_config_json["languageModelConfig"]["textGeneration"]["TEXT_GENERATION_API_URL"]
         os.environ['TEXT_GENERATION_WEB_SOCKET_URL'] = sys_config_json["languageModelConfig"]["textGeneration"].get(
             "TEXT_GENERATION_WEB_SOCKET_URL", "ws://127.0.0.1:5005/api/v1/stream")
+        os.environ['OWN_API_URL'] = sys_config_json["languageModelConfig"]["ownAI"]["OWN_API_URL"]
 
         # 是否开启proxy
         enableProxy = sys_config_json["enableProxy"]
