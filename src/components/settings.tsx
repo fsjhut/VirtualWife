@@ -20,7 +20,34 @@ import { join } from 'path';
 import { voiceData, getVoices } from '@/features/tts/ttsApi';
 
 const tabNames = ['基础设置', '自定义角色设置', '大语言模型设置', '记忆模块设置', '高级设置'];
-const llm_enums = ["openai", "text_generation","own_ai"]
+const llm_enums = ["openai", "text_generation", "own_ai"]
+const own_ai_type = [
+  {
+    name: "原始知识库",
+    api_url: "http://192.168.123.234:8048/",
+    socket_url:"ws://127.0.0.1:5005/api/v1/stream"
+}, 
+  {
+    name: "llm对话",
+    api_url: "http://192.168.123.170:2421/chat/chat",
+    socket_url:"ws://127.0.0.1:5005/api/v1/stream"
+}, {
+    name: "搜索引擎对话(暂不支持)",
+    api_url: "http://192.168.123.170:2421/chat/search_engine_chat",
+    socket_url:"ws://127.0.0.1:5005/api/v1/stream"
+  }, {
+    name: "知识库对话",
+    api_url: "http://192.168.123.170:2421/chat/knowledge_base_chat",
+    socket_url:"ws://127.0.0.1:5005/api/v1/stream"
+  }, {
+    name: "agent对话",
+    api_url: "http://192.168.123.170:2421/chat/agent_chat",
+    socket_url:"ws://127.0.0.1:5005/api/v1/stream"
+  }, {
+    name: "场景对话",
+    api_url: "http://192.168.123.170:2421/chat/roleplay_chat",
+    socket_url:"ws://127.0.0.1:5005/api/v1/stream"
+}]
 
 const publicDir = join(process.cwd(), 'public');
 
@@ -85,6 +112,8 @@ export const Settings = ({
   const [backgroundModels, setBackgroundModels] = useState([backgroundModelData]);
   const [voices, setVoices] = useState([voiceData]);
   const [ttsType, setTTSType] = useState('Edge');
+  const [apiType, setApiType] = useState('http://192.168.123.170:2421/chat/knowledge_base_chat');
+  const [socketType, setSocketType] = useState('ws://127.0.0.1:5005/api/v1/stream');
   const [voiceId, setVoiceId] = useState('xiaoyi');
   const backgroundFileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedVrmModelId, setSelectedVrmModelId] = useState(-1);
@@ -109,6 +138,8 @@ export const Settings = ({
     queryUserVrmModels().then(data => setUserVrmModels(data))
     querySystemVrmModels().then(data => setSystemVrmModels(data))
     setTTSType(globalConfig.ttsConfig.ttsType);
+    setApiType(globalConfig.languageModelConfig.ownAI.OWN_API_URL)
+    setSocketType(globalConfig.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL)
     getVoices(globalConfig.ttsConfig.ttsType).then(data => setVoices(data))
   }, [])
 
@@ -447,22 +478,48 @@ export const Settings = ({
           </div>
         </div>
         <div className="section">
+          {/* 可选择配置 */}
           <div className="title">own-ai-webui配置</div>
+          <select
+              value={formData.languageModelConfig.ownAI.OWN_API_URL}
+              onChange={e => {
+                debugger  
+                let a = formData.languageModelConfig.ownAI.OWN_API_URL
+                const selectedApiUrl= e.target.options[e.target.selectedIndex].getAttribute('data-key');
+                const seelctedSocketUrl = e.target.options[e.target.selectedIndex].getAttribute('data-value');
+
+                formData.languageModelConfig.ownAI.OWN_API_URL = selectedApiUrl + "";
+                formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL = seelctedSocketUrl + "";
+                if (selectedApiUrl != '-1') {
+                  setFormData(formData);
+                  setApiType(formData.languageModelConfig.ownAI.OWN_API_URL)
+                  setSocketType(formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL)
+                }
+              }}>
+              <option key="-1" value="-1" data-key="-1">请选择</option>
+              {own_ai_type.map(aitype => (
+                <option key={aitype.api_url} value={aitype.api_url} data-key={aitype.api_url} data-value={ aitype.socket_url}>
+                  {aitype.name}
+                </option>
+              ))}
+            </select >
           <div className="field">
             <label>OWN_API_URL</label>
-            <input type="text" defaultValue={formData.languageModelConfig.ownAI.OWN_API_URL}
+            <input type="text" value={apiType}
               onChange={e => {
                 formData.languageModelConfig.ownAI.OWN_API_URL = e.target.value
                 setFormData(formData);
+                setApiType(formData.languageModelConfig.ownAI.OWN_API_URL);
               }}
             />
           </div>
           <div className="field">
             <label>OWN_WEB_SOCKET_URL</label>
-            <input type="text" defaultValue={formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL ? formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL : "ws://127.0.0.1:5005/api/v1/stream"}
+            <input type="text" value={socketType ? socketType : "ws://127.0.0.1:5005/api/v1/stream"}
               onChange={e => {
                 formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL = e.target.value
                 setFormData(formData);
+                setSocketType(formData.languageModelConfig.ownAI.OWN_WEB_SOCKET_URL);
               }}
             />
           </div>
